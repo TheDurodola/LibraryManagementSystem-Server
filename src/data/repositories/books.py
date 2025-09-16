@@ -1,6 +1,8 @@
 from src.config.config import db
 from src.data.models.book import Book
 
+
+
 class Books:
     @classmethod
     def save_book(cls, book: Book) -> Book:
@@ -10,28 +12,22 @@ class Books:
 
     @classmethod
     def delete_book_by_isbn(cls, book: Book) -> None:
-        book_isbn = book.isbn
-        book_db = Book.query.get(book_isbn)
+        book_db = db.session.get(Book, book.isbn)
 
         db.session.delete(book_db)
         db.session.commit()
 
     @classmethod
-    def get_book_by_isbn(cls, book_isbn) -> Book:
-        return Book.query.get(book_isbn)
+    def get_book_by_isbn(cls, book) -> Book:
+        return db.session.get(Book, book.isbn)
 
-    @classmethod
-    def increase_book_quantity(cls, book: Book, quantity) -> None:
-        book_isbn = book.isbn
-        book_db = Book.query.get(book_isbn)
-        book_db.quantity += quantity
-
-    @classmethod
-    def decrease_book_quantity(cls, book_isbn, quantity) -> None:
-        book_db = Book.query.get(book_isbn)
-        book_db.quantity -= quantity
 
     @classmethod
     def check_table_size(cls) -> int :
-        return Book.query.count()
+        return db.session.query(Book).count()
+
+    @classmethod
+    def delete_all(cls) -> None:
+        db.session.query(Book).delete()
+        db.session.commit()
 

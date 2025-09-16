@@ -1,6 +1,4 @@
 from datetime import datetime
-from enum import unique
-
 from src.config.config import db
 
 
@@ -13,4 +11,6 @@ class Book(db.Model):
     genre = db.Column(db.String(50), nullable=False)
     quantity = db.Column(db.Integer, nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.now)
+
+    reservations = db.relationship("BookReservation", back_populates="book", cascade="all, delete-orphan")
 

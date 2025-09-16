@@ -11,19 +11,23 @@ class Users:
         return user
 
     @classmethod
-    def delete_user_by_isbn(cls, user: User) -> None:
-        user_isbn = user.isbn
-        user_db = User.query.get(user_isbn)
+    def delete_user_by_id(cls, user: User) -> None:
+        user_db = db.session.get(User, user.id)
 
         db.session.delete(user_db)
         db.session.commit()
 
     @classmethod
-    def get_user_by_isbn(cls, user_isbn) -> User:
-        return User.query.get(user_isbn)
+    def get_user_by_id(cls, user) -> User:
+        return db.session.get(User, user.id)
 
 
     @classmethod
     def check_table_size(cls) -> int :
-        return User.query.count()
+        return db.session.query(User).count()
+
+    @classmethod
+    def delete_all(cls):
+        db.session.query(User).delete()
+        db.session.commit()
 
