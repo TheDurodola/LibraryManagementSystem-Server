@@ -16,10 +16,5 @@ class User(UserMixin, db.Model):
     created_at = db.Column(db.DateTime,default=db.func.current_timestamp())
     code = db.Column(db.String(20), nullable=True)
 
-    def set_password(self, password):
-        self.password = generate_password_hash(password)
 
-    def check_password(self, password):
-        return check_password_hash(self.password, password)
 
-    reservations = db.relationship("BookReservation", back_populates="user", cascade="all, delete-orphan")
