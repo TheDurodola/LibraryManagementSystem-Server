@@ -21,6 +21,10 @@ class Users:
     def get_user_by_id(cls, user) -> User:
         return db.session.get(User, user.id)
 
+    @classmethod
+    def get_user_by_email(cls, user: User) -> User | None:
+        user_email = user.email
+        return db.session.query(User).filter_by(email=user_email).first()
 
     @classmethod
     def check_table_size(cls) -> int :
