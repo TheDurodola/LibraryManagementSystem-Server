@@ -22,8 +22,8 @@ class Users:
         return db.session.get(User, user.id)
 
     @classmethod
-    def get_user_by_email(cls, user: User) -> User | None:
-        user_email = user.email
+    def get_user_by_email(cls, email: str) -> User | None:
+        user_email = email
         return db.session.query(User).filter_by(email=user_email).first()
 
     @classmethod

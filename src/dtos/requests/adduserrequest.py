@@ -1,11 +1,16 @@
+from dataclasses import dataclass, Field
+
+
+
 class AddUserRequest:
-    def __init__(self, firstname=None, lastname=None, email=None, password=None, phone=None, role=None):
+    def __init__(self, firstname=None, lastname=None, email=None, password=None, phone=None, role=None, code=None):
         self._firstname = firstname
         self._lastname = lastname
         self._email = email
         self._password = password
         self._phone = phone
         self._role = role
+        self._code = code
 
 
     @property
@@ -60,3 +65,11 @@ class AddUserRequest:
     @role.setter
     def role(self, value):
         self._role = value
+
+    @property
+    def code(self):
+        return self._code
+
+    @code.setter
+    def code(self, value):
+        self._code = value

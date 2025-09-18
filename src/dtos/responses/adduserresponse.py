@@ -39,3 +39,12 @@ class AddUserResponse:
     @role.setter
     def role(self, value):
         self._role = value
+
+
+    def to_dict(self):
+        return {
+            "firstname": self._firstname,
+            "email": self._email,
+            "phone": self._phone,
+            "role": self._role
+        }

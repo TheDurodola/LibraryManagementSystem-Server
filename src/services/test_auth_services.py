@@ -10,12 +10,15 @@ from src.services.auth_services import AuthServices
 class TestAuthServices(TestCase):
 
     def setUp(self):
+
         self.app_context = app.app_context()
         self.app_context.push()
         self.request_context = app.test_request_context()
         self.request_context.push()
 
+
         db.create_all()
+        Users.delete_all()
 
         self.request = AddUserRequest()
         self.request.email = "John@gmail.com"

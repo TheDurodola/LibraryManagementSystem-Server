@@ -1,19 +1,30 @@
 import re
 
+from werkzeug.security import check_password_hash, generate_password_hash
+
+from src.data.models.admin import Admin
 from src.data.repositories.users import Users
 from src.exceptions.invalidemailexception import InvalidEmailException
+from src.exceptions.invalidloginexception import InvalidLoginException
 from src.exceptions.invalidnameexception import InvalidNameException
 from src.exceptions.invalidphonenumberexception import InvalidPhoneNumberException
 from src.exceptions.invalidroleexception import InvalidRoleException
 from src.exceptions.useralreadyexistsexception import UserAlreadyExistsException
 
 
-def validate_user( user):
-        if Users.get_user_by_email(user):
+def validate_user(user):
+        existingUser = Users.get_user_by_email(user.email)
+
+        if existingUser:
             raise UserAlreadyExistsException("User already exists")
 
         if user.role not in ["librarian", "admin", "patron"]:
             raise InvalidRoleException("Invalid role")
+
+        if user.code is not None:
+            admin = Admin()
+            if check_password_hash(generate_password_hash(user.code), generate_password_hash(admin.code)):
+                raise InvalidLoginException("Wrong verification code")
 
         EMAIL_REGEX = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
 
