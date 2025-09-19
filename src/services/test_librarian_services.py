@@ -31,3 +31,13 @@ class TestLibrarianServices(TestCase):
         self.assertEqual(response.quantity, 3)
         self.assertEqual(response.author, "Mark Manson")
         self.assertEqual(response.title, "The Subtle Art of Not Giving a F*ck")
+
+    def test_delete_book(self):
+        request = AddBookRequest()
+        request.book_isbn = "9780062641540"
+        request.quantity = 3
+
+        response = self.services.add_book(request)
+
+
+        

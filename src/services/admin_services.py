@@ -1,2 +1,3 @@
 class AdminServices:
-    pass
+    @classmethod
+    def delete_user(cls, user_id):

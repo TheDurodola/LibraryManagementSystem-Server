@@ -35,3 +35,9 @@ class Users:
         db.session.query(User).delete()
         db.session.commit()
 
+    @classmethod
+    def delete_user(cls, user_email):
+        db.session.query(User).filter_by(email=user_email).delete()
+
+
+

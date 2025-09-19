@@ -17,6 +17,7 @@ def create_app():
     app.config["SESSION_COOKIE_SAMESITE"] = "Lax"
     app.config["SESSION_COOKIE_SECURE"] = False
 
+
     db.init_app(app)
     login_manager.init_app(app)
 

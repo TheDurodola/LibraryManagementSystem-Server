@@ -24,7 +24,6 @@ class LibrarianServices:
         book.genre = list_of_book_info["genre"]
         book.author = list_of_book_info["author"]
         book.added_by = request.added_by
-
         return map_book_to_add_book_response(Books.save_book(book))
 
 
@@ -44,9 +43,7 @@ class LibrarianServices:
         Books.save_book(book)
 
 
-    @classmethod
-    def get_all_books_added_by_librarian(cls):
-        return Book.query.filter_by(added_by=current_user.id).all()
+
 
 
 

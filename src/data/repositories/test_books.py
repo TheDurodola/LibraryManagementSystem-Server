@@ -15,12 +15,8 @@ class TestBooks(TestCase):
 
 
         db.create_all()
-
-
         self.books = Books()
         self.books.delete_all()
-
-
         self.client = self.app.test_client()
 
     def tearDown(self):
