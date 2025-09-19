@@ -3,7 +3,7 @@ import re
 from werkzeug.security import check_password_hash, generate_password_hash
 
 from src.data.models.admin import Admin
-from src.data.repositories.users import Users
+from src.data.repositories.users import *
 from src.exceptions.invalidemailexception import InvalidEmailException
 from src.exceptions.invalidloginexception import InvalidLoginException
 from src.exceptions.invalidnameexception import InvalidNameException
@@ -13,7 +13,8 @@ from src.exceptions.useralreadyexistsexception import UserAlreadyExistsException
 
 
 def validate_user(user):
-        existingUser = Users.get_user_by_email(user.email)
+
+        existingUser = find_by_email(user)
 
         if existingUser:
             raise UserAlreadyExistsException("User already exists")

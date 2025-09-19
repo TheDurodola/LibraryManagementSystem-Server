@@ -5,7 +5,7 @@ from src.config.config import db
 
 
 from src.data.models.book import Book
-from src.data.repositories.books import BookRepository
+from src.data.repositories.books import *
 
 
 class TestBooks(TestCase):
@@ -24,7 +24,7 @@ class TestBooks(TestCase):
         self.book.added_by = "test"
 
         db.create_all()
-        self.books = BookRepository()
+        
 
     def tearDown(self):
         db.session.remove()
@@ -33,20 +33,20 @@ class TestBooks(TestCase):
 
 
     def test_save_book(self):
-        self.books.save(self.book)
-        self.assertEqual(self.books.count(), 1)
+        save(self.book)
+        self.assertEqual(count(), 1)
 
     def test_delete_book_by_book_isbn(self):
 
-        self.books.save(self.book)
-        self.books.delete_by_isbn(self.book.isbn)
-        self.assertEqual(self.books.count(), 0)
+        save(self.book)
+        delete_by_isbn(self.book.isbn)
+        self.assertEqual(count(), 0)
 
     def test_delete_book(self):
 
-        saved = self.books.save(self.book)
-        self.books.delete_book(saved)
-        self.assertEqual(self.books.count(), 0)
+        saved = save(self.book)
+        delete_book(saved)
+        self.assertEqual(count(), 0)
 
     def test_that_delete_all(self):
         book1 = Book()
@@ -58,11 +58,11 @@ class TestBooks(TestCase):
         book1.author = "test"
         book1.added_by = "test"
 
-        self.books.save(self.book)
-        self.books.save(book1)
-        self.books.delete_all()
-        self.assertEqual(self.books.count(), 0)
+        save(self.book)
+        save(book1)
+        delete_all()
+        self.assertEqual(count(), 0)
 
     def test_find_all(self):
-        self.books.save(self.book)
-        self.assertEqual(len(self.books.find_all()), 1)
+        save(self.book)
+        self.assertEqual(len(find_all()), 1)
