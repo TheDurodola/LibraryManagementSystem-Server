@@ -1,23 +1,29 @@
+import unittest
 from unittest import TestCase
 
 from src.data.models.admin import Admin
 from src.data.models.librarian import Librarian
 from src.data.models.patron import Patron
-from src.config.config import db, app
+from app import create_app
+from src.config.config import db
+
 from users import Users
 
 
 
-class TestUsers(TestCase):
+class UserTestCase(unittest.TestCase):
     def setUp(self):
-        self.app_context = app.app_context()
+        self.app = create_app()
+        self.app_context = self.app.app_context()
         self.app_context.push()
-
         db.create_all()
+        self.client = self.app.test_client()
         self.users = Users()
-        self.users.delete_all()
 
-
+    def tearDown(self):
+        db.session.remove()
+        db.drop_all()
+        self.app_context.pop()
 
     def test_save_all_types_of_user(self):
         self.user = Librarian()

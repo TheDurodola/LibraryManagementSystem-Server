@@ -1,6 +1,7 @@
 from unittest import TestCase
 
-from src.config.config import app, db
+from src.config.config import db
+from app import create_app
 from src.data.repositories.users import Users
 from src.dtos.requests.adduserrequest import AddUserRequest
 from src.exceptions.useralreadyexistsexception import UserAlreadyExistsException
@@ -11,9 +12,9 @@ class TestAuthServices(TestCase):
 
     def setUp(self):
 
-        self.app_context = app.app_context()
+        self.app_context = create_app().app_context()
         self.app_context.push()
-        self.request_context = app.test_request_context()
+        self.request_context = create_app().test_request_context()
         self.request_context.push()
 
 

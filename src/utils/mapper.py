@@ -4,7 +4,9 @@ from src.data.models.admin import Admin
 from src.data.models.librarian import Librarian
 from src.data.models.patron import Patron
 from src.data.models.user import User
+from src.dtos.responses.addbookresponse import AddBookResponse
 from src.dtos.responses.adduserresponse import AddUserResponse
+from src.dtos.responses.getbookresponse import GetBookResponse
 from src.dtos.responses.loginresponse import LoginResponse
 
 
@@ -61,3 +63,30 @@ def map_user_to_login_response(user):
     response.role = user.role
     response.phone = user.phone
     return response
+
+
+
+def map_book_to_add_book_response(book) -> AddBookResponse:
+    response = AddBookResponse()
+    response.title = book.title
+    response.isbn = book.isbn
+    response.isbn_13 = book.isbn_13
+    response.quantity = book.quantity
+    response.genre = book.genre
+    response.author = book.author
+    return response
+
+def map_book_to_get_book_response(book) -> GetBookResponse:
+    response = GetBookResponse()
+    response.book_name = book.title
+    response.book_isbn = book.isbn
+    response.author_name = book.author
+    if book.quantity > 0:
+        response.is_available = True
+
+    else:
+        response.is_available = False
+
+    response.category_name = book.genre
+    return response
+

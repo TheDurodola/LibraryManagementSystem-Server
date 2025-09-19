@@ -12,14 +12,14 @@ class Books:
 
     @classmethod
     def delete_book_by_isbn(cls, book: Book) -> None:
-        book_db = db.session.get(Book, book.isbn)
+        book_db = db.session.query(Book).filter_by(isbn=book.isbn).first()
 
         db.session.delete(book_db)
         db.session.commit()
 
     @classmethod
     def get_book_by_isbn(cls, book) -> Book:
-        return db.session.get(Book, book.isbn)
+        return db.session.query(Book).filter_by(isbn=book.isbn).first()
 
 
     @classmethod
