@@ -33,8 +33,8 @@ class UserTestCase(unittest.TestCase):
         self.user.password = "password"
         self.user.phone = "phone"
         self.user.email = "email1"
-        saved = self.users.save_user(self.user)
-        self.assertEqual(self.users.check_table_size(), 1)
+        saved = self.users.save(self.user)
+        self.assertEqual(self.users.count(), 1)
         self.user1 = Patron()
 
         self.user1.firstname = "firstname"
@@ -43,8 +43,8 @@ class UserTestCase(unittest.TestCase):
         self.user1.phone = "phone"
         self.user1.email = "email2"
 
-        self.users.save_user(self.user1)
-        self.assertEqual(self.users.check_table_size(), 2)
+        self.users.save(self.user1)
+        self.assertEqual(self.users.count(), 2)
         self.user2 = Admin()
 
         self.user2.firstname = "firstname"
@@ -53,8 +53,8 @@ class UserTestCase(unittest.TestCase):
         self.user2.phone = "phone"
         self.user2.email = "email3"
 
-        self.users.save_user(self.user2)
-        self.assertEqual(self.users.check_table_size(), 3)
+        self.users.save(self.user2)
+        self.assertEqual(self.users.count(), 3)
 
     def test_delete_user(self):
         self.user = Librarian()
@@ -65,8 +65,8 @@ class UserTestCase(unittest.TestCase):
         self.user.phone = "phone"
         self.user.email = "email1"
         self.user.role = "admin"
-        saved = self.users.save_user(self.user)
-        self.assertEqual(self.users.check_table_size(), 1)
-        self.users.delete_user_by_id(saved)
-        self.assertEqual(self.users.check_table_size(), 0)
+        saved = self.users.save(self.user)
+        self.assertEqual(self.users.count(), 1)
+        self.users.delete_user(saved)
+        self.assertEqual(self.users.count(), 0)
 

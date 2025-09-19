@@ -4,40 +4,46 @@ from src.data.models.user import User
 
 
 class Users:
-    @classmethod
-    def save_user(cls, user: User) -> User:
-        db.session.add(user)
-        db.session.commit()
-        return user
 
-    @classmethod
-    def delete_user_by_id(cls, user: User) -> None:
-        user_db = db.session.get(User, user.id)
-
-        db.session.delete(user_db)
-        db.session.commit()
-
-    @classmethod
-    def get_user_by_id(cls, user) -> User:
-        return db.session.get(User, user.id)
-
-    @classmethod
-    def get_user_by_email(cls, email: str) -> User | None:
-        user_email = email
-        return db.session.query(User).filter_by(email=user_email).first()
-
-    @classmethod
-    def check_table_size(cls) -> int :
+    def count(self) -> int:
         return db.session.query(User).count()
 
-    @classmethod
-    def delete_all(cls):
+    def save(self, user: User) -> User:
+        if_updateable = User.query.filter_by(id=user.id).first()
+
+        if if_updateable is not None:
+            db.session.delete(if_updateable)
+            db.session.add(user)
+            db.session.commit()
+            return user
+        else:
+            db.session.add(user)
+            db.session.commit()
+            return user
+
+    def find_all(self):
+        return User.query.all()
+
+    def exists_by_isbn(self, isbn: str) -> bool:
+        if User.query.filter_by(isbn=isbn).first() is not None:
+            return True
+        else:
+            return False
+
+    def find_by_isbn(self, isbn: str) -> User:
+        return User.query.filter_by(isbn=isbn).first()
+
+    def delete_by_isbn(self, isbn: str) -> None:
+        user = User.query.filter_by(isbn=isbn).first()
+        db.session.delete(user)
+        db.session.commit()
+
+    def delete_all(self):
         db.session.query(User).delete()
         db.session.commit()
 
-    @classmethod
-    def delete_user(cls, user_email):
-        db.session.query(User).filter_by(email=user_email).delete()
-
+    def delete_user(self, user: User) -> None:
+        db.session.delete(user)
+        db.session.commit()
 
 

@@ -2,7 +2,7 @@ from unittest import TestCase
 
 from app import create_app
 from src.config.config import db
-from src.data.repositories import books
+
 
 from src.data.models.book import Book
 from src.data.repositories.books import BookRepository
@@ -33,20 +33,19 @@ class TestBooks(TestCase):
 
 
     def test_save_book(self):
-        with self.app.app_context():
-            self.books.save(self.book)
+        self.books.save(self.book)
         self.assertEqual(self.books.count(), 1)
 
     def test_delete_book_by_book_isbn(self):
-        with self.app.app_context():
-            self.books.save(self.book)
-            self.books.delete_by_isbn(self.book.isbn)
+
+        self.books.save(self.book)
+        self.books.delete_by_isbn(self.book.isbn)
         self.assertEqual(self.books.count(), 0)
 
     def test_delete_book(self):
-        with self.app.app_context():
-            saved = self.books.save(self.book)
-            self.books.delete_book(saved)
+
+        saved = self.books.save(self.book)
+        self.books.delete_book(saved)
         self.assertEqual(self.books.count(), 0)
 
     def test_that_delete_all(self):
@@ -58,13 +57,12 @@ class TestBooks(TestCase):
         book1.quantity = 2
         book1.author = "test"
         book1.added_by = "test"
-        with self.app.app_context():
-            self.books.save(self.book)
-            self.books.save(book1)
-            self.books.delete_all()
+
+        self.books.save(self.book)
+        self.books.save(book1)
+        self.books.delete_all()
         self.assertEqual(self.books.count(), 0)
 
     def test_find_all(self):
-        with self.app.app_context():
-            self.books.save(self.book)
+        self.books.save(self.book)
         self.assertEqual(len(self.books.find_all()), 1)
