@@ -2,32 +2,37 @@ from src.config.config import db
 from src.data.models.book import Book
 
 
+class BookRepository:
+    def count(self) -> int:
+        return db.session.query(Book).count()
 
-class Books:
-    @classmethod
-    def save_book(cls, book: Book) -> Book:
+    def save(self, book: Book) -> Book:
         db.session.add(book)
         db.session.commit()
         return book
 
-    @classmethod
-    def delete_book_by_isbn(cls, book: Book) -> None:
-        book_db = db.session.query(Book).filter_by(isbn=book.isbn).first()
+    def find_all(self):
+        return Book.query.all()
 
-        db.session.delete(book_db)
+    def exists_by_isbn(self, isbn: str) -> bool:
+        if Book.query.filter_by(isbn=isbn).first() is not None:
+            return True
+        else:
+            return False
+
+    def find_by_isbn(self, isbn: str) -> Book:
+        return Book.query.filter_by(isbn=isbn).first()
+
+    def delete_by_isbn(self, isbn: str) -> None:
+        book = Book.query.filter_by(isbn=isbn).first()
+        db.session.delete(book)
         db.session.commit()
 
-    @classmethod
-    def get_book_by_isbn(cls, book) -> Book:
-        return db.session.query(Book).filter_by(isbn=book.isbn).first()
-
-
-    @classmethod
-    def check_table_size(cls) -> int :
-        return db.session.query(Book).count()
-
-    @classmethod
-    def delete_all(cls) -> None:
+    def delete_all(self):
         db.session.query(Book).delete()
+        db.session.commit()
+
+    def delete_book(self, book: Book) -> None:
+        db.session.delete(book)
         db.session.commit()
 
