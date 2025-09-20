@@ -1,9 +1,14 @@
-from src.data.models.borrowrecord import BorrowRecord
-from src.data.repositories.books import Books
-from src.data.repositories.borrowrecords import BorrowRecordsRepository
-from src.dtos.requests.borrowBookRequest import BorrowBookRequest
-
-
 
 class PatronServices:
-  pass
+  def get_all_available_books(self):
+    pass
+
+  def borrow_book(self):
+    pass
+
+  def return_book(self):
+    pass
+
+  def get_all_borrowed_books(self):
+    pass
+

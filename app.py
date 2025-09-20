@@ -3,6 +3,7 @@ from flask import Flask
 from flask_cors import CORS
 from src.config.config import db, login_manager
 from src.controllers.authcontroller import auth_bp
+from src.controllers.librariancontroller import librarian_bp
 from src.utils.errorhandler import register_error_handlers
 
 
@@ -22,6 +23,7 @@ def create_app():
     login_manager.init_app(app)
 
     app.register_blueprint(auth_bp)
+    app.register_blueprint(librarian_bp)
 
 
     with app.app_context():

@@ -24,7 +24,7 @@ class AuthServices:
         return response
 
     @classmethod
-    def login_in(self, request: LoginRequest) -> LoginResponse:
+    def login_in(cls, request: LoginRequest) -> LoginResponse:
         user = find_by_email(request)
         if user is None:
             raise InvalidLoginException("Email not found")
@@ -34,3 +34,7 @@ class AuthServices:
         login_user(user)
 
         return map_user_to_login_response(user)
+
+
+    def logout_user(self):
+        login_user()
