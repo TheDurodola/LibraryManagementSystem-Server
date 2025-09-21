@@ -5,6 +5,7 @@ from src.exceptions.invalidloginexception import InvalidLoginException
 from src.exceptions.invalidnameexception import InvalidNameException
 from src.exceptions.invalidphonenumberexception import InvalidPhoneNumberException
 from src.exceptions.invalidroleexception import InvalidRoleException
+from src.exceptions.unauthorizedaccessexception import UnauthorizedAccessException
 from src.exceptions.useralreadyexistsexception import UserAlreadyExistsException
 
 
@@ -75,13 +76,24 @@ def register_error_handlers(app):
         }
         return jsonify(response), error.status_code
 
+    @app.errorhandler(UnauthorizedAccessException)
+    def handle_invalid_phone_exception(error):
+        response = {
+            "success": False,
+            "error": {
+                "message": error.message,
+                "code": error.status_code
+            }
+        }
+        return jsonify(response), error.status_code
+
 
     @app.errorhandler(Exception)
     def handle_global_exception(error):
         response = {
             "success": False,
             "error": {
-                "message": "Something went wrong",
+                "message": f"Something went wrong",
                 "code": 500
             }
         }

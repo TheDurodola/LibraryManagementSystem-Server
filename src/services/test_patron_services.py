@@ -1,0 +1,88 @@
+from unittest import TestCase
+
+from app import create_app
+from src.config.config import db
+from src.data.models.borrowrecord import BorrowRecord
+from src.data.repositories.books import count
+from src.dtos.requests.addbookrequest import AddBookRequest
+from src.dtos.requests.adduserrequest import AddUserRequest
+from src.dtos.requests.borrowBookRequest import BorrowBookRequest
+from src.services.auth_services import AuthServices
+from src.services.librarian_services import LibrarianServices
+from src.services.patron_services import PatronServices
+
+
+class TestPatronServices(TestCase):
+    def setUp(self):
+        self.app = create_app()
+        self.app_context = self.app.app_context()
+        self.app_context.push()
+
+        db.create_all()
+
+        self.service = PatronServices()
+        self.libservice = LibrarianServices()
+
+
+
+
+
+
+
+
+    def tearDown(self):
+        db.session.remove()
+        db.drop_all()
+        self.app_context.pop()
+
+    def test_get_all_available_books(self):
+        self.book = AddBookRequest()
+        self.book.book_isbn = "9780062457714"
+        self.book.quantity = 1
+        self.book.added_by = 1
+        self.libservice.add_book(self.book)
+        self.assertEqual(count(), 1)
+        self.assertEqual(len(self.service.get_all_available_books()), 1)
+
+    def test_borrow_book(self):
+        self.book = AddBookRequest()
+        self.book.book_isbn = "9780062457714"
+        self.book.quantity = 1
+        self.book.added_by = 1
+        self.libservice.add_book(self.book)
+
+
+
+        self.assertEqual(count(), 1)
+        borrowBookRequest = BorrowBookRequest()
+        borrowBookRequest.bookId = "9780062457714"
+        borrowBookRequest.userId = 1
+        self.service.borrow_book(borrowBookRequest)
+        self.assertEqual(len(self.service.get_all_borrowed_books(1)), 1)
+        self.assertEqual(len(self.service.get_all_available_books()), 0)
+
+
+    def test_return_book(self):
+        self.book = AddBookRequest()
+        self.book.book_isbn = "9780062457714"
+        self.book.quantity = 1
+        self.book.added_by = 1
+        self.libservice.add_book(self.book)
+
+        self.assertEqual(count(), 1)
+        borrowBookRequest = BorrowBookRequest()
+        borrowBookRequest.bookId = "9780062457714"
+        borrowBookRequest.userId = 1
+        self.service.borrow_book(borrowBookRequest)
+        self.assertEqual(len(self.service.get_all_borrowed_books(1)), 1)
+        self.assertEqual(len(self.service.get_all_available_books()), 0)
+        self.service.return_book(borrowBookRequest)
+        self.assertEqual(len(self.service.get_all_borrowed_books(1)), 0)
+        self.assertEqual(len(self.service.get_all_available_books()), 1)
+
+
+
+
+
+
+

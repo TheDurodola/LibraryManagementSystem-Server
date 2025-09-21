@@ -1,5 +1,7 @@
 from src.config.config import db
 from src.data.models.user import User
+from src.dtos.requests.deleteuserrequest import DeleteUserRequest
+
 
 def count() -> int:
     return db.session.query(User).count()
@@ -31,10 +33,14 @@ def exists(user) -> bool:
 def find_by_email(request) -> User:
     return User.query.filter_by(email=request.email).first()
 
-def delete_by_isbn(isbn: str) -> None:
-    user = User.query.filter_by(isbn=isbn).first()
+def delete_by_email_and_phone(request: DeleteUserRequest) -> bool:
+    user = User.query.filter_by(email=request.email, phone = request.phone).first()
+    if user is None:
+        return False
     db.session.delete(user)
     db.session.commit()
+    return True
+
 
 def delete_all():
     db.session.query(User).delete()

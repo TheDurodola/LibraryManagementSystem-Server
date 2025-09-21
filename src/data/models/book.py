@@ -10,6 +10,18 @@ class Book(db.Model):
     genre = db.Column(db.String(50), nullable=False)
     quantity = db.Column(db.Integer, nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.now)
-    added_by = db.Column(db.String(10))
+    added_by = db.Column(db.String(100))
     author = db.Column(db.String(100), nullable=False)
 
+
+    def to_dict(self):
+        return {
+            "isbn": self.isbn,
+            "isbn_13": self.isbn_13,
+            "title": self.title,
+            "genre": self.genre,
+            "quantity": self.quantity,
+            "created_at": self.created_at,
+            "added_by": self.added_by,
+            "author": self.author
+        }

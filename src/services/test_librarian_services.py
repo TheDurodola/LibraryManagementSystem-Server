@@ -11,11 +11,9 @@ from src.services.librarian_services import LibrarianServices
 
 class TestLibrarianServices(TestCase):
     def setUp(self):
-
         self.app = create_app()
         self.app_context = self.app.app_context()
         self.app_context.push()
-
 
         db.create_all()
 
@@ -46,7 +44,7 @@ class TestLibrarianServices(TestCase):
         self.service.add_book(request)
         self.assertEqual(count(), 1)
 
-        self.assertEqual("The Subtle Art of Not Giving a F**k", self.service.get_all_books()[0].title)
+        self.assertEqual("The Subtle Art of Not Giving a F**k", self.service.get_all_books()[0]["title"])
 
         request2 = BookRequest(isbn="9780062457714", quantity=3)
 

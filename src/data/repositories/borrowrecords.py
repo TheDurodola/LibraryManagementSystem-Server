@@ -1,3 +1,5 @@
+import datetime
+
 from sqlalchemy.exc import IntegrityError
 
 from src.config.config import db
@@ -12,8 +14,11 @@ def save(record: BorrowRecord) -> BorrowRecord:
     if_updateable = BorrowRecord.query.filter_by(book_isbn=record.book_isbn, borrower_id=record.borrower_id).first()
 
     if if_updateable is not None:
+        new_record = if_updateable
+        new_record.is_returned = True
+        new_record.return_date = datetime.datetime.now()
         db.session.delete(if_updateable)
-        db.session.add(record)
+        db.session.add(new_record)
         db.session.commit()
         return record
     else:

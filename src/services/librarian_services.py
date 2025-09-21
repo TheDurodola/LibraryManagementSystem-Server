@@ -33,14 +33,18 @@ class LibrarianServices:
 
 
    def get_all_books(self):
-      return find_all()
+      list_of_all_books = find_all()
+      list_of_books = []
+      for book in list_of_all_books:
+         list_of_books.append(book.to_dict())
+      return list_of_books
 
    def get_all_available_books(self):
       list_of_all_books = find_all()
       list_of_available_books = []
       for book in list_of_all_books:
          if book.quantity > 0:
-            list_of_available_books.append(book)
+            list_of_available_books.append(book.to_dict())
       return list_of_available_books
 
 
