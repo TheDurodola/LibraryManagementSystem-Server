@@ -1,37 +1,53 @@
 from src.config.config import db
 from src.data.models.user import User
+from src.dtos.requests.deleteuserrequest import DeleteUserRequest
 
 
+def count() -> int:
+    return db.session.query(User).count()
 
-class Users:
-    @classmethod
-    def save_user(cls, user: User) -> User:
+
+def save( user: User) -> User:
+    if_updateable = User.query.filter_by(id=user.id).first()
+
+    if if_updateable is not None:
+        db.session.delete(if_updateable)
+        db.session.add(user)
+        db.session.commit()
+        return user
+    else:
         db.session.add(user)
         db.session.commit()
         return user
 
-    @classmethod
-    def delete_user_by_id(cls, user: User) -> None:
-        user_db = db.session.get(User, user.id)
+def find_all():
+    return User.query.all()
 
-        db.session.delete(user_db)
-        db.session.commit()
+def exists(user) -> bool:
+    if db.session.query(User).filter_by(email=user.email).first() is not None:
+        return True
+    else:
+        return False
 
-    @classmethod
-    def get_user_by_id(cls, user) -> User:
-        return db.session.get(User, user.id)
 
-    @classmethod
-    def get_user_by_email(cls, email: str) -> User | None:
-        user_email = email
-        return db.session.query(User).filter_by(email=user_email).first()
+def find_by_email(request) -> User:
+    return User.query.filter_by(email=request.email).first()
 
-    @classmethod
-    def check_table_size(cls) -> int :
-        return db.session.query(User).count()
+def delete_by_email_and_phone(request: DeleteUserRequest) -> bool:
+    user = User.query.filter_by(email=request.email, phone = request.phone).first()
+    if user is None:
+        return False
+    db.session.delete(user)
+    db.session.commit()
+    return True
 
-    @classmethod
-    def delete_all(cls):
-        db.session.query(User).delete()
-        db.session.commit()
+
+def delete_all():
+    db.session.query(User).delete()
+    db.session.commit()
+
+def delete_user(user: User) -> None:
+    db.session.delete(user)
+    db.session.commit()
+
 

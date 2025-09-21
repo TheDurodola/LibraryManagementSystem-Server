@@ -1,90 +1,68 @@
 from unittest import TestCase
 
-from src.config.config import db
-from src.data.models.book import Book
 from app import create_app
-from books import Books
+from src.config.config import db
+
+
+from src.data.models.book import Book
+from src.data.repositories.books import *
 
 
 class TestBooks(TestCase):
     def setUp(self):
-
         self.app = create_app()
         self.app_context = self.app.app_context()
         self.app_context.push()
 
+        self.book = Book()
+        self.book.isbn = "123456789"
+        self.book.isbn_13 = "123456789"
+        self.book.title = "test"
+        self.book.genre = "test"
+        self.book.quantity = 2
+        self.book.author = "test"
+        self.book.added_by = "test"
 
         db.create_all()
-
-
-        self.books = Books()
-        self.books.delete_all()
-
-
-        self.client = self.app.test_client()
+        
 
     def tearDown(self):
         db.session.remove()
         db.drop_all()
         self.app_context.pop()
 
-    def test_save_book(self):
-        book = Book(
-            title="Book Title",
-            isbn="978-0-06-245771-1",
-            author="Mark Manson",
-            isbn_13="1",
-            quantity=3,
-            genre="Genre",
 
-        )
-        saved = self.books.save_book(book)
-        self.assertEqual(self.books.check_table_size(), 1)
-        self.assertEqual(saved.title, "Book Title")
+    def test_save_book(self):
+        save(self.book)
+        self.assertEqual(count(), 1)
+
+    def test_delete_book_by_book_isbn(self):
+
+        save(self.book)
+        delete_by_isbn(self.book.isbn)
+        self.assertEqual(count(), 0)
 
     def test_delete_book(self):
-        book = Book()
 
-        book.title = "Book Title"
-        book.isbn = "978-0-06-245771-3"
-        book.isbn_13 = "3"
-        book.quantity = 3
-        book.author = "Mark Manson"
-        book.genre = "Genre"
+        saved = save(self.book)
+        delete_book(saved)
+        self.assertEqual(count(), 0)
 
+    def test_that_delete_all(self):
+        book1 = Book()
+        book1.isbn = "12345678910"
+        book1.isbn_13 = "12345678910"
+        book1.title = "test"
+        book1.genre = "test"
+        book1.quantity = 2
+        book1.author = "test"
+        book1.added_by = "test"
 
-        saved = self.books.save_book(book)
-        self.assertEqual(self.books.check_table_size(), 1)
-        self.books.delete_book_by_isbn(saved)
-        self.assertEqual(self.books.check_table_size(), 0)
+        save(self.book)
+        save(book1)
+        delete_all()
+        self.assertEqual(count(), 0)
 
-    def test_get_book(self):
-        book = Book()
-
-        book.title = "Book Title"
-        book.isbn = "978-0-06-245771-4"
-        book.isbn_13 = "4"
-        book.quantity = 3
-        book.genre = "Genre"
-
-        book.author = "Mark Manson"
-        saved = self.books.save_book(book)
-        self.assertEqual(self.books.get_book_by_isbn(saved).title, book.title)
-
-    def test_delete_all_works(self):
-        book1 = Book(isbn="978-0-06-245771-5", isbn_13="5", title="Book Title", quantity=3, genre="Genre",
-                     )
-        book2 = Book(isbn="978-0-06-245771-6", isbn_13="6", title="Book Title", quantity=3, genre="Genre",
-                    )
-        book3 = Book(isbn="978-0-06-245771-7", isbn_13="7", title="Book Title", quantity=3, genre="Genre",
-                     )
-        book1.author = "Mark Manson"
-        book2.author = "Mark Manson"
-        book3.author = "Mark Manson"
-
-        self.books.save_book(book1)
-        self.books.save_book(book2)
-        self.books.save_book(book3)
-        self.assertEqual(self.books.check_table_size(), 3)
-        self.books.delete_all()
-        self.assertEqual(self.books.check_table_size(), 0)
+    def test_find_all(self):
+        save(self.book)
+        self.assertEqual(len(find_all()), 1)

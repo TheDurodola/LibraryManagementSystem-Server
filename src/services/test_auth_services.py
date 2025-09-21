@@ -2,7 +2,8 @@ from unittest import TestCase
 
 from src.config.config import db
 from app import create_app
-from src.data.repositories.users import Users
+
+from src.data.repositories.users import *
 from src.dtos.requests.adduserrequest import AddUserRequest
 from src.exceptions.useralreadyexistsexception import UserAlreadyExistsException
 from src.services.auth_services import AuthServices
@@ -11,7 +12,6 @@ from src.services.auth_services import AuthServices
 class TestAuthServices(TestCase):
 
     def setUp(self):
-
         self.app_context = create_app().app_context()
         self.app_context.push()
         self.request_context = create_app().test_request_context()
@@ -19,7 +19,7 @@ class TestAuthServices(TestCase):
 
 
         db.create_all()
-        Users.delete_all()
+        delete_all()
 
         self.request = AddUserRequest()
         self.request.email = "John@gmail.com"
@@ -41,7 +41,7 @@ class TestAuthServices(TestCase):
 
         saved_user = self.services.register_user(self.request)
         self.assertEqual(saved_user.firstname, "John")
-        self.assertEqual(Users.check_table_size(), 1)
+        self.assertEqual(count(), 1)
 
 
         with self.assertRaises(UserAlreadyExistsException):

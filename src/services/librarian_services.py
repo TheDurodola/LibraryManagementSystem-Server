@@ -1,59 +1,51 @@
-from flask_login import current_user
-
 from src.data.models.book import Book
-from src.data.repositories.books import Books
+from src.data.repositories.books import save, find_by_isbn, find_all
 from src.dtos.requests.addbookrequest import AddBookRequest
+from src.dtos.requests.bookrequest import BookRequest
 from src.dtos.responses.addbookresponse import AddBookResponse
-from src.dtos.responses.getbookresponse import GetBookResponse
 from src.exceptions.invalidquantityexception import InvalidQuantityException
 from src.utils.getbookinfo import search_book_by_isbn
-from src.utils.mapper import map_book_to_add_book_response, map_book_to_get_book_response
-
-
+from src.utils.mapper import map_book_to_add_book_response
 
 
 class LibrarianServices:
-    @classmethod
-    def add_book(cls, request : AddBookRequest) -> AddBookResponse:
-        list_of_book_info = search_book_by_isbn(request.book_isbn)
-        book = Book()
-        book.title = list_of_book_info["title"]
-        book.isbn = list_of_book_info["isbn"]
-        book.isbn_13 = list_of_book_info["isbn13"]
-        book.quantity = request.quantity
-        book.genre = list_of_book_info["genre"]
-        book.author = list_of_book_info["author"]
-        book.added_by = request.added_by
 
-        return map_book_to_add_book_response(Books.save_book(book))
-
-
-    @classmethod
-    def get_book_by_isbn(cls, isbn: str) -> GetBookResponse:
-        book = Books.get_book_by_isbn(isbn)
-        return map_book_to_get_book_response(book)
+   def add_book(self, request: AddBookRequest) -> AddBookResponse:
+      book = Book()
+      apiResponse = search_book_by_isbn(request.book_isbn)
+      book.isbn = apiResponse["isbn"]
+      book.isbn_13 = apiResponse["isbn_13"]
+      book.title = apiResponse["title"]
+      book.author = apiResponse["author"]
+      book.genre = apiResponse["genre"]
+      book.quantity = request.quantity
+      book.added_by = request.added_by
+      save(book)
+      return AddBookResponse(map_book_to_add_book_response(book))
 
 
-    @classmethod
-    def add_book_quantity(cls, addToBookQuantityRequest) -> None:
-        book = Books.get_book_by_isbn(addToBookQuantityRequest.isbn)
-        if addToBookQuantityRequest.quantity < 0:
-            raise InvalidQuantityException("Quantity cannot be negative")
-        book.quantity += addToBookQuantityRequest.quantity
-        Books.delete_book_by_isbn(book)
-        Books.save_book(book)
+   def increase_book_quantity(self, request:BookRequest) -> None:
+      book = find_by_isbn(request.isbn)
+      if request.quantity < 0:
+         raise InvalidQuantityException("Quantity cannot be negative")
+      book.quantity += request.quantity
+      save(book)
 
 
-    @classmethod
-    def get_all_books_added_by_librarian(cls):
-        return Book.query.filter_by(added_by=current_user.id).all()
+   def get_all_books(self):
+      list_of_all_books = find_all()
+      list_of_books = []
+      for book in list_of_all_books:
+         list_of_books.append(book.to_dict())
+      return list_of_books
 
-
-
-
-
-
-
+   def get_all_available_books(self):
+      list_of_all_books = find_all()
+      list_of_available_books = []
+      for book in list_of_all_books:
+         if book.quantity > 0:
+            list_of_available_books.append(book.to_dict())
+      return list_of_available_books
 
 
 

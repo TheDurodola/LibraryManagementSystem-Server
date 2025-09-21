@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify
-from flask_login import logout_user, login_required
+from flask_login import logout_user, login_required, current_user
 
 from src.dtos.requests.adduserrequest import AddUserRequest
 from src.dtos.requests.loginrequest import LoginRequest
@@ -15,11 +15,24 @@ def register_user():
 
 @auth_bp.route('/login', methods=['POST'])
 def login_user():
+    print("User logged in:")
     return jsonify(AuthServices.login_in(LoginRequest(**request.get_json())).to_dict()), 200
 
 
-@auth_bp.route('/logout', methods=['POST'])
+@auth_bp.route('/logout')
 @login_required
 def logout_user_route():
+    print("User logged out:")
     logout_user()
     return jsonify({"message": "Logged out"}), 200
+
+
+
+@auth_bp.route('/profile')
+@login_required
+def get_profile():
+    profile = current_user.to_dict()
+    profile.pop("code")
+    profile.pop("id")
+    profile.pop("created_at")
+    return jsonify(profile)
