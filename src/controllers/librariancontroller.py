@@ -1,5 +1,6 @@
 from flask import Blueprint, request, jsonify
 from flask_login import login_required, current_user
+from pyexpat.errors import messages
 
 from src.dtos.requests.addbookrequest import AddBookRequest
 from src.dtos.requests.bookrequest import BookRequest
@@ -37,8 +38,11 @@ def increase_book_quatity():
     data = request.get_json()
     book = BookRequest(data["isbn"], data["quantity"])
 
-    librarian_service.increase_book_quantity(book)
-    return jsonify({"message": "Book quantity increased successfully"})
+    details = librarian_service.increase_book_quantity(book)
+    name = details.title
+    quantity = details.quantity
+
+    return jsonify({"message": f"{name} quantity increased successfully. New stock quantity is {quantity}"})
 
 
 @librarian_bp.route("/book", methods=["GET"])

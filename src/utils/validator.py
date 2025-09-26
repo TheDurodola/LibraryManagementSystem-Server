@@ -17,7 +17,7 @@ def validate_user(user):
         existingUser = find_by_email(user)
 
         if existingUser:
-            raise UserAlreadyExistsException("User already exists")
+            raise UserAlreadyExistsException("Email already exists")
 
         if user.role not in ["librarian", "admin", "patron"]:
             raise InvalidRoleException("Invalid role")
@@ -35,12 +35,12 @@ def validate_user(user):
         NAME_REGEX = r"^[A-Za-z][A-Za-z\s'-]{1,49}$"
 
         if not re.match(NAME_REGEX, user.firstname):
-            raise InvalidNameException("Invalid firstname format")
+            raise InvalidNameException("Invalid Firstname format")
 
         if not re.match(NAME_REGEX, user.lastname):
-            raise InvalidNameException("Invalid lastname format")
+            raise InvalidNameException("Invalid Lastname format")
 
         PHONE_REGEX = r"^(\+?\d{1,3}[- ]?)?(\(?\d{2,4}\)?[- ]?)?\d{3,4}[- ]?\d{4}$"
 
         if not re.match(PHONE_REGEX, user.phone):
-            raise InvalidPhoneNumberException("Invalid phone number format")
+            raise InvalidPhoneNumberException("Invalid Phone Number format")

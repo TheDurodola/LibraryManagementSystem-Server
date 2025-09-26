@@ -19,12 +19,17 @@ def login_user():
     return jsonify(AuthServices.login_in(LoginRequest(**request.get_json())).to_dict()), 200
 
 
-@auth_bp.route('/logout')
+@auth_bp.route('/logout', methods=["POST"])
 @login_required
 def logout_user_route():
-    print("User logged out:")
     logout_user()
     return jsonify({"message": "Logged out"}), 200
+
+
+
+@auth_bp.route('/active', methods=['GET'])
+def active_user():
+    return jsonify({"message": "Active user"}), 200
 
 
 
@@ -32,7 +37,6 @@ def logout_user_route():
 @login_required
 def get_profile():
     profile = current_user.to_dict()
-    profile.pop("code")
     profile.pop("id")
     profile.pop("created_at")
-    return jsonify(profile)
+    return jsonify(profile), 200

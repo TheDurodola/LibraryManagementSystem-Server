@@ -24,12 +24,12 @@ class LibrarianServices:
       return AddBookResponse(map_book_to_add_book_response(book))
 
 
-   def increase_book_quantity(self, request:BookRequest) -> None:
+   def increase_book_quantity(self, request:BookRequest) -> Book:
       book = find_by_isbn(request.isbn)
-      if request.quantity < 0:
+      if int (request.quantity) < 0:
          raise InvalidQuantityException("Quantity cannot be negative")
-      book.quantity += request.quantity
-      save(book)
+      book.quantity += int(request.quantity)
+      return save(book)
 
 
    def get_all_books(self):

@@ -12,8 +12,7 @@ from src.utils.errorhandler import register_error_handlers
 
 def create_app():
     app = Flask(__name__)
-    CORS(app, supports_credentials=True, origins=["http://localhost:3000"])
-
+    CORS(app, supports_credentials=True, origins=["http://localhost:3000", "http://localhost:5173"])
     register_error_handlers(app)
 
     app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:Durodola62@localhost/library'
@@ -35,7 +34,6 @@ def create_app():
 
     @login_manager.user_loader
     def load_user(user_id):
-        # print(f"Loading user {user_id}")
         return User.query.get(int(user_id))
 
     with app.app_context():
