@@ -25,8 +25,8 @@ def borrow_book():
         raise UnauthorizedAccessException()
     data = request.get_json()
     borrow = BorrowBookRequest()
-    borrow.bookId = data["bookId"]
-    borrow.userId = current_user.email
+    borrow.isbn = data["isbn"]
+    borrow.user_email = current_user.email
     patron_service.borrow_book(borrow)
     return jsonify({"message": "Book borrowed successfully"})
 
@@ -47,7 +47,7 @@ def return_book():
         raise UnauthorizedAccessException()
     data = request.get_json()
     borrow = BorrowBookRequest()
-    borrow.bookId = data["bookId"]
-    borrow.userId = current_user.email
+    borrow.isbn = data["bookId"]
+    borrow.user_email = current_user.email
     patron_service.return_book(borrow)
     return jsonify({"message": "Book returned successfully"})

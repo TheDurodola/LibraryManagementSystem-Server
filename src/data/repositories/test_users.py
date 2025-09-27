@@ -27,7 +27,6 @@ class UserTestCase(unittest.TestCase):
 
     def test_save_all_types_of_user(self):
         self.user = Librarian()
-
         self.user.firstname = "firstname"
         self.user.lastname = "lastname"
         self.user.password = "password"

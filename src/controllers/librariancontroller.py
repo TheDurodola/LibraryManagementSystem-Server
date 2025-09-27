@@ -18,7 +18,7 @@ def add_book():
         raise UnauthorizedAccessException()
     data = request.get_json()
     add_book_request = AddBookRequest()
-    add_book_request.book_isbn = data["book_isbn"]
+    add_book_request.isbn = data["isbn"]
     add_book_request.quantity = data["quantity"]
     add_book_request.added_by = current_user.email
 
@@ -42,7 +42,7 @@ def increase_book_quatity():
     name = details.title
     quantity = details.quantity
 
-    return jsonify({"message": f"{name} quantity increased successfully. New stock quantity is {quantity}"})
+    return jsonify({"message": f"{name} quantity increased successfully. New stock quantity is {quantity}"}),200
 
 
 @librarian_bp.route("/book", methods=["GET"])

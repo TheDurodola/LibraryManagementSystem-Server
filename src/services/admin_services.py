@@ -1,6 +1,8 @@
 from src.data.repositories import books
 from src.data.repositories.users import find_all, delete_by_email_and_phone
 from src.dtos.requests.deleteuserrequest import DeleteUserRequest
+from src.exceptions.booknotavailableexception import BookNotAvailableException
+from src.exceptions.userdatabasetableexception import UserDatabaseTableException
 
 
 class AdminServices:
@@ -11,7 +13,7 @@ class AdminServices:
             list_of_users.append(user.to_dict())
 
         if len(list_of_users) == 0:
-            raise Exception("No users found")
+            raise UserDatabaseTableException("No users found")
         return list_of_users
 
 
@@ -23,7 +25,7 @@ class AdminServices:
                 list_of_patrons.append(user.to_dict())
 
         if len(list_of_patrons) == 0:
-            raise Exception("No patrons found")
+            raise UserDatabaseTableException("No patrons found")
         return list_of_patrons
 
     def get_all_books(self):
@@ -33,7 +35,7 @@ class AdminServices:
             list_of_books.append(book.to_dict())
 
         if len(list_of_books) == 0:
-            raise Exception("No books found")
+            raise BookNotAvailableException("No books found")
         return list_of_books
 
 
@@ -45,7 +47,7 @@ class AdminServices:
                 list_of_librarians.append(user.to_dict())
 
         if len(list_of_librarians) == 0:
-            raise Exception("No librarians found")
+            raise UserDatabaseTableException("No librarians found")
         return list_of_librarians
 
 
@@ -57,7 +59,7 @@ class AdminServices:
                 list_of_available_books.append(book.to_dict())
 
         if len(list_of_available_books) == 0:
-            raise Exception("No books found")
+            raise BookNotAvailableException("No books found")
         return list_of_available_books
 
     def delete_user(self, request: DeleteUserRequest):
@@ -65,7 +67,7 @@ class AdminServices:
         if deleted:
             return {"message": "User deleted successfully"}
         else:
-            raise Exception("User not found")
+            raise UserDatabaseTableException("User not found")
 
     def get_all_unavailable_books(self):
         list_of_all_books = books.find_all()
@@ -75,6 +77,6 @@ class AdminServices:
                 list_of_unavailable_books.append(book.to_dict())
 
         if len(list_of_unavailable_books) == 0:
-            raise Exception("No books found")
+            raise BookNotAvailableException("No books found")
 
         return list_of_unavailable_books

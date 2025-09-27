@@ -4,7 +4,7 @@ from src.dtos.requests.addbookrequest import AddBookRequest
 from src.dtos.requests.bookrequest import BookRequest
 from src.dtos.responses.addbookresponse import AddBookResponse
 from src.exceptions.invalidquantityexception import InvalidQuantityException
-from src.utils.getbookinfo import search_book_by_isbn
+from src.utils.api_call import search_book_by_isbn
 from src.utils.mapper import map_book_to_add_book_response
 
 
@@ -12,7 +12,7 @@ class LibrarianServices:
 
    def add_book(self, request: AddBookRequest) -> AddBookResponse:
       book = Book()
-      apiResponse = search_book_by_isbn(request.book_isbn)
+      apiResponse = search_book_by_isbn(request.isbn)
       book.isbn = apiResponse["isbn"]
       book.isbn_13 = apiResponse["isbn_13"]
       book.title = apiResponse["title"]

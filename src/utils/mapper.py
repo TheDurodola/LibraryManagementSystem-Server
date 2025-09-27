@@ -1,4 +1,4 @@
-from werkzeug.security import generate_password_hash
+from werkzeug.security import generate_password_hash, check_password_hash
 
 from src.data.models.admin import Admin
 from src.data.models.librarian import Librarian
@@ -8,9 +8,10 @@ from src.dtos.responses.addbookresponse import AddBookResponse
 from src.dtos.responses.adduserresponse import AddUserResponse
 from src.dtos.responses.getbookresponse import GetBookResponse
 from src.dtos.responses.loginresponse import LoginResponse
+from src.exceptions.unauthorizedaccessexception import UnauthorizedAccessException
 
 
-def map_add_user_request_to_user(request) -> None | Admin | Patron | Librarian:
+def map_add_user_request_to_user(request) ->  Admin | Patron | Librarian:
     if request.role == "admin":
         user = Admin()
         user.firstname = request.firstname
@@ -20,6 +21,8 @@ def map_add_user_request_to_user(request) -> None | Admin | Patron | Librarian:
         user.role = request.role
         user.password = request.password
         user.role = request.role
+        # if user.code != "bojIsTheGoat":
+        #     raise UnauthorizedAccessException("Invalid code. Please contact the system administrator.")
         user.code = request.code
         return user
     if request.role == "patron":
@@ -28,7 +31,6 @@ def map_add_user_request_to_user(request) -> None | Admin | Patron | Librarian:
         user.lastname = request.lastname
         user.email = request.email
         user.phone = request.phone
-        user.role = request.role
         user.password = request.password
         user.role = request.role
         return user
@@ -40,9 +42,8 @@ def map_add_user_request_to_user(request) -> None | Admin | Patron | Librarian:
         user.phone = request.phone
         user.role = request.role
         user.password = request.password
-        user.role = request.role
         return user
-    return None
+    raise UnauthorizedAccessException("Invalid role. Please contact the system administrator.")
 
 
 def map_user_to_add_user_response(saved_user: User) -> AddUserResponse:
