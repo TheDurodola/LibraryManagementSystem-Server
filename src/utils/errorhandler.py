@@ -1,15 +1,19 @@
 from flask import jsonify
 
+from src.exceptions.apiresponseexception import APIResponseException
+from src.exceptions.booknotavailableexception import BookNotAvailableException
 from src.exceptions.invalidemailexception import InvalidEmailException
 from src.exceptions.invalidloginexception import InvalidLoginException
 from src.exceptions.invalidnameexception import InvalidNameException
 from src.exceptions.invalidphonenumberexception import InvalidPhoneNumberException
 from src.exceptions.invalidroleexception import InvalidRoleException
 from src.exceptions.unauthorizedaccessexception import UnauthorizedAccessException
+from src.exceptions.unreturnedbookexception import UnreturnedBookException
 from src.exceptions.useralreadyexistsexception import UserAlreadyExistsException
 
 
 def register_error_handlers(app):
+
     @app.errorhandler(UserAlreadyExistsException)
     def handle_user_exists(error):
         response = {
@@ -87,15 +91,50 @@ def register_error_handlers(app):
         }
         return jsonify(response), error.status_code
 
-    #
-    # @app.errorhandler(Exception)
-    # def handle_global_exception(error):
-    #     response = {
-    #         "success": False,
-    #         "error": {
-    #             "message": f"Something went wrong",
-    #             "code": 500
-    #         }
-    #     }
-    #     return jsonify(response), 500
+    @app.errorhandler(APIResponseException)
+    def handle_api_response_exception(error):
+        response = {
+            "success": False,
+            "error": {
+                "message": error.message,
+                "code": error.status_code
+            }
+        }
 
+        return jsonify(response), error.status_code
+
+
+    @app.errorhandler(UnreturnedBookException)
+    def handle_unreturned_book_exception(error):
+        response = {
+            "success": False,
+            "error": {
+                "message": error.message,
+                "code": error.status_code
+            }
+        }
+        return jsonify(response), error.status_code
+
+
+    @app.errorhandler(BookNotAvailableException)
+    def handle_book_not_available_exception(error):
+        response = {
+            "success": False,
+            "error": {
+                "message": error.message,
+                "code": error.status_code
+            }
+        }
+        return jsonify(response), error.status_code
+
+
+    @app.errorhandler(Exception)
+    def handle_global_exception(error):
+        response = {
+            "success": False,
+            "error": {
+                "message": error.message,
+                "code": 500
+            }
+        }
+        return jsonify(response), 500

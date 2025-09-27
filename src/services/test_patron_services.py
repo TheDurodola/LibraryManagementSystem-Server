@@ -59,7 +59,6 @@ class TestPatronServices(TestCase):
         with self.assertRaises(BookNotAvailableException):
             self.assertEqual(len(self.service.get_all_available_books()), 0)
 
-
     def test_return_book(self):
         self.book = AddBookRequest()
         self.book.isbn = "9780062457714"
@@ -82,8 +81,6 @@ class TestPatronServices(TestCase):
         with self.assertRaises(BookNotAvailableException):
             self.assertEqual(len(self.service.get_all_borrowed_books("1")), 0)
         self.assertEqual(len(self.service.get_all_available_books()), 1)
-
-
 
     def test_that_user_cant_borrow_more_than_five_different_books_at_once(self):
         self.book = AddBookRequest()
@@ -143,6 +140,20 @@ class TestPatronServices(TestCase):
         borrowBookRequest.user_email = "bolajidurodola@gmail.com"
         with self.assertRaises(Exception):
             self.service.borrow_book(borrowBookRequest)
+
+
+    def test_that_user_cant_return_book_he_hasnt_borrowed(self):
+        self.book = AddBookRequest()
+        self.book.isbn = "9780062457714"
+        self.book.quantity = 1
+        self.book.added_by = 1
+        self.libservice.add_book(self.book)
+
+        borrowBookRequest = BorrowBookRequest()
+        borrowBookRequest.isbn = "9780137081073"
+        borrowBookRequest.user_email = "bolajidurodola@gmail.com"
+        with self.assertRaises(Exception):
+            self.service.return_book(borrowBookRequest)
 
 
 

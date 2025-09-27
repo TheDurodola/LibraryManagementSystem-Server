@@ -1,8 +1,15 @@
 import requests
+import os
+from dotenv import load_dotenv
+
+
 from src.exceptions.apiresponseexception import APIResponseException
 
+load_dotenv()
+API_KEY = os.getenv("API_KEY")
+
 def search_book_by_isbn(isbn: str):
-    url = f"https://www.googleapis.com/books/v1/volumes?q=isbn:{isbn}&key=AIzaSyCvRifDhuBxgtwUYadEYFiYwZCx0v1jmNg"
+    url = f"https://www.googleapis.com/books/v1/volumes?q=isbn:{isbn}&key={API_KEY}"
     response = requests.get(url)
 
     if response.status_code != 200:

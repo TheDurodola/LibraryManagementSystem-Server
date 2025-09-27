@@ -1,9 +1,7 @@
 from unittest import TestCase
 
 from app import create_app
-from src.config.config import db
 
-from src.data.models.borrowrecord import BorrowRecord
 from src.data.repositories.borrowrecords import *
 from src.exceptions.unreturnedbookexception import UnreturnedBookException
 
