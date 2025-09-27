@@ -29,7 +29,7 @@ class TestLibrarianServices(TestCase):
 
     def test_add_book(self):
         request = AddBookRequest()
-        request.book_isbn = "9780062457714"
+        request.isbn = "9780062457714"
         request.quantity = 1
         request.added_by = 1
         self.service.add_book(request)
@@ -38,7 +38,7 @@ class TestLibrarianServices(TestCase):
 
     def test_that_quantity_has_been_increased(self):
         request = AddBookRequest()
-        request.book_isbn = "9780062457714"
+        request.isbn = "9780062457714"
         request.quantity = 1
         request.added_by = 1
         self.service.add_book(request)
@@ -57,14 +57,14 @@ class TestLibrarianServices(TestCase):
 
     def test_get_available_books(self):
         request = AddBookRequest()
-        request.book_isbn = "9780062457714"
+        request.isbn = "9780062457714"
         request.quantity = 1
         request.added_by = 1
 
         self.service.add_book(request)
 
         request1 = AddBookRequest()
-        request1.book_isbn = "9780062955937"
+        request1.isbn = "9780062955937"
         request1.quantity = 0
         request1.added_by = 1
 

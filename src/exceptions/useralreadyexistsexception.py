@@ -1,4 +1,4 @@
-class UserAlreadyExistsException(ValueError):
+class UserAlreadyExistsException(Exception):
     def __init__(self, message="User already exists"):
         self.message = message
         self.status_code = 409

@@ -40,7 +40,6 @@ def map_add_user_request_to_user(request) -> None | Admin | Patron | Librarian:
         user.phone = request.phone
         user.role = request.role
         user.password = request.password
-        user.role = request.role
         return user
     return None
 
