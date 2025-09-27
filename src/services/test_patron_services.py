@@ -18,7 +18,6 @@ class TestPatronServices(TestCase):
         self.app = create_app()
         self.app_context = self.app.app_context()
         self.app_context.push()
-
         db.create_all()
 
         self.service = PatronServices()
@@ -72,7 +71,7 @@ class TestPatronServices(TestCase):
         borrowBookRequest = BorrowBookRequest()
         borrowBookRequest.isbn = "9780062457714"
         borrowBookRequest.user_email = "1"
-        borrowBookRequest.book_title = "The Subtle Art of Not Giving a F**k"
+        # borrowBookRequest.book_title = "The Subtle Art of Not Giving a F**k"
 
         self.service.borrow_book(borrowBookRequest)
         self.assertEqual(len(self.service.get_all_borrowed_books("1")), 1)
@@ -86,6 +85,64 @@ class TestPatronServices(TestCase):
 
 
 
+    def test_that_user_cant_borrow_more_than_five_different_books_at_once(self):
+        self.book = AddBookRequest()
+        self.book.isbn = "9780062457714"
+        self.book.quantity = 1
+        self.book.added_by = 1
+        self.libservice.add_book(self.book)
+        self.book.isbn = "9780062956569"
+        self.book.quantity = 1
+        self.book.added_by = 1
+        self.libservice.add_book(self.book)
+        self.book.isbn = "9781338878929"
+        self.book.quantity = 1
+        self.book.added_by = 1
+        self.libservice.add_book(self.book)
+        self.book.isbn = "9780062315007"
+        self.book.quantity = 1
+        self.book.added_by = 1
+        self.libservice.add_book(self.book)
+        self.book.isbn = "9780062351562"
+        self.book.quantity = 1
+        self.book.added_by = 1
+        self.libservice.add_book(self.book)
+        self.book.isbn = "9780137081073"
+        self.book.quantity = 1
+        self.book.added_by = 1
+        self.libservice.add_book(self.book)
+        self.assertEqual(6, count())
+
+        borrowBookRequest = BorrowBookRequest()
+        borrowBookRequest.isbn = "9780062457714"
+        borrowBookRequest.user_email = "bolajidurodola@gmail.com"
+        self.service.borrow_book(borrowBookRequest)
+
+        borrowBookRequest = BorrowBookRequest()
+        borrowBookRequest.isbn = "9780062956569"
+        borrowBookRequest.user_email = "bolajidurodola@gmail.com"
+        self.service.borrow_book(borrowBookRequest)
+
+        borrowBookRequest = BorrowBookRequest()
+        borrowBookRequest.isbn = "9781338878929"
+        borrowBookRequest.user_email = "bolajidurodola@gmail.com"
+        self.service.borrow_book(borrowBookRequest)
+
+        borrowBookRequest = BorrowBookRequest()
+        borrowBookRequest.isbn = "9780062315007"
+        borrowBookRequest.user_email = "bolajidurodola@gmail.com"
+        self.service.borrow_book(borrowBookRequest)
+
+        borrowBookRequest = BorrowBookRequest()
+        borrowBookRequest.isbn = "9780062351562"
+        borrowBookRequest.user_email = "bolajidurodola@gmail.com"
+        self.service.borrow_book(borrowBookRequest)
+
+        borrowBookRequest = BorrowBookRequest()
+        borrowBookRequest.isbn = "9780137081073"
+        borrowBookRequest.user_email = "bolajidurodola@gmail.com"
+        with self.assertRaises(Exception):
+            self.service.borrow_book(borrowBookRequest)
 
 
 

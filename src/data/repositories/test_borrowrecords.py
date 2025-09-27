@@ -14,7 +14,7 @@ class Test(TestCase):
         self.app_context = self.app.app_context()
         self.app_context.push()
         self.bookrecords = BorrowRecord()
-        self.bookrecords.isbn13 = "978-0-06-245771-1"
+        self.bookrecords.isbn = "978-0-06-245771-1"
         self.bookrecords.book_title = "The Subtle Art of Not Giving a F**k"
         self.bookrecords.user_email = "bolajidurodola@gmail.com"
         self.bookrecords.return_date = "2021-01-02"
@@ -36,7 +36,7 @@ class Test(TestCase):
     def test_get_records(self):
         save(self.bookrecords)
         bookrecords = BorrowRecord()
-        bookrecords.isbn13 = "978-0-06-245771-1"
+        bookrecords.isbn = "978-0-06-245771-1"
         bookrecords.book_title = "The Subtle Art of Not Giving a F**k"
         bookrecords.user_email = "bolajidurodola@gmail.com"
         bookrecords.is_returned = True
@@ -57,7 +57,7 @@ class Test(TestCase):
             save(self.bookrecords)
         self.bookrecords.is_returned = True
         borrows2 = BorrowRecord()
-        borrows2.isbn13 = "978-0-06-245771-1"
+        borrows2.isbn = "978-0-06-245771-1"
         borrows2.book_title = "The Subtle Art of Not Giving a F**k"
         borrows2.user_email = "bolajidurodola@gmail.com"
         save(borrows2)

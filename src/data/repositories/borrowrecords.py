@@ -78,3 +78,7 @@ def delete_all():
 def delete(record: BorrowRecord) -> None:
     db.session.delete(record)
     db.session.commit()
+
+
+def find_borrowed_books_by_user(user_email):
+    return BorrowRecord.query.filter_by(user_email=user_email, is_returned=False).all()
