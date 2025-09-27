@@ -127,14 +127,14 @@ def register_error_handlers(app):
         }
         return jsonify(response), error.status_code
 
-
-    @app.errorhandler(Exception)
-    def handle_global_exception(error):
-        response = {
-            "success": False,
-            "error": {
-                "message": error.message,
-                "code": 500
-            }
-        }
-        return jsonify(response), 500
+    #
+    # @app.errorhandler(Exception)
+    # def handle_global_exception(error):
+    #     response = {
+    #         "success": False,
+    #         "error": {
+    #             "message": "Something went wrong. Please contact the administrator.",
+    #             "code": 500
+    #         }
+    #     }
+    #     return jsonify(response), 500

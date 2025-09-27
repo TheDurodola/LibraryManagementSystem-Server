@@ -18,7 +18,7 @@ def add_book():
         raise UnauthorizedAccessException()
     data = request.get_json()
     add_book_request = AddBookRequest()
-    add_book_request.book_isbn = data["isbn"]
+    add_book_request.isbn = data["isbn"]
     add_book_request.quantity = data["quantity"]
     add_book_request.added_by = current_user.email
 

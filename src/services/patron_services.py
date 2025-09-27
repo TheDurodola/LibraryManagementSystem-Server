@@ -16,7 +16,7 @@ def check_request_validity(request):
         if not record.is_returned:
             list_of_borrowed_books.append(record.to_dict())
     if len(list_of_borrowed_books) > 0:
-        raise Exception("You have already borrowed this book")
+        raise BookNotAvailableException("You have already borrowed this book")
     return book
 
 
@@ -56,6 +56,9 @@ class PatronServices:
         borrowrecords.save(borrow_request)
 
     def return_book(self, request: BorrowBookRequest):
+        validation = borrowrecords.find_borrowed_book_by_isbn(request.isbn, request.user_email)
+        if  validation is None:
+            raise BookNotAvailableException("You have not borrowed this book")
         book = find_by_isbn(request.isbn)
         if book is None:
             raise BookNotAvailableException("Book not found")

@@ -33,6 +33,10 @@ def return_book(record: BorrowRecord):
     db.session.commit()
 
 
+def find_borrowed_book_by_isbn(isbn , user_email):
+    return BorrowRecord.query.filter_by(isbn=isbn, user_email= user_email, is_returned=False).first()
+
+
 def find_record_using_isbn_and_user_email(isbn, user_email):
     found_record = BorrowRecord.query.filter_by(isbn=isbn, user_email=user_email).all()
     return found_record

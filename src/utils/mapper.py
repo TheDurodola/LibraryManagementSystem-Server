@@ -1,3 +1,5 @@
+from werkzeug.security import generate_password_hash, check_password_hash
+
 from src.data.models.admin import Admin
 from src.data.models.librarian import Librarian
 from src.data.models.patron import Patron
@@ -19,8 +21,8 @@ def map_add_user_request_to_user(request) ->  Admin | Patron | Librarian:
         user.role = request.role
         user.password = request.password
         user.role = request.role
-        if user.code != "bojIsTheGoat":
-            raise UnauthorizedAccessException("Invalid code. Please contact the system administrator.")
+        # if user.code != "bojIsTheGoat":
+        #     raise UnauthorizedAccessException("Invalid code. Please contact the system administrator.")
         user.code = request.code
         return user
     if request.role == "patron":

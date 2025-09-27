@@ -9,7 +9,7 @@ load_dotenv()
 API_KEY = os.getenv("API_KEY")
 
 def search_book_by_isbn(isbn: str):
-    url = f"https://www.googleapis.com/books/v1/volumes?q=isbn:{isbn}&key={API_KEY}"
+    url = f"https://www.googleapis.com/books/v1/volumes?q=isbn:{isbn}{API_KEY}"
     response = requests.get(url)
 
     if response.status_code != 200:
