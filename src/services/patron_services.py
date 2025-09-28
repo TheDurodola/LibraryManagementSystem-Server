@@ -59,9 +59,9 @@ class PatronServices:
         validation = borrowrecords.find_borrowed_book_by_isbn(request.isbn, request.user_email)
         if  validation is None:
             raise BookNotAvailableException("You have not borrowed this book")
+
         book = find_by_isbn(request.isbn)
-        if book is None:
-            raise BookNotAvailableException("Book not found")
+
 
         book.quantity += 1
         save(book)

@@ -12,7 +12,7 @@ from src.utils.errorhandler import register_error_handlers
 
 def create_app():
     app = Flask(__name__)
-    CORS(app, supports_credentials=True, origins=["http://localhost:3000", "http://localhost:5173"])
+    CORS(app, supports_credentials=True)
     register_error_handlers(app)
 
     app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:Durodola62@localhost/library'

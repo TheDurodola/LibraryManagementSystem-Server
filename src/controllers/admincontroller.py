@@ -14,12 +14,16 @@ admin_service = AdminServices()
 @admin_bp.route("/users", methods=["GET"])
 @login_required
 def retrieve_users():
+    if current_user.role != "admin":
+        raise UnauthorizedAccessException()
     return jsonify(admin_service.get_users()), 200
 
 
 @admin_bp.route("/patrons", methods=["GET"])
 @login_required
 def retrieve_all_patrons():
+    if current_user.role != "admin":
+        raise UnauthorizedAccessException()
     return jsonify(admin_service.get_all_patrons())
 
 

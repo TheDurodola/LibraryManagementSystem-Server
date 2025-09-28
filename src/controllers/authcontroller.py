@@ -14,8 +14,7 @@ def register_user():
 
 
 @auth_bp.route('/login', methods=['POST'])
-def login_user():
-    print("User logged in:")
+def login():
     return jsonify(AuthServices.login_in(LoginRequest(**request.get_json())).to_dict()), 200
 
 
@@ -33,7 +32,7 @@ def active_user():
 
 
 
-@auth_bp.route('/profile')
+@auth_bp.route('/profile', methods=['GET'])
 @login_required
 def get_profile():
     profile = current_user.to_dict()
