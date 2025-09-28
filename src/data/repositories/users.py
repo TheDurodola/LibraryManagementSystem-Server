@@ -31,7 +31,7 @@ def exists(user) -> bool:
 
 
 def find_by_email(request) -> User:
-    return User.query.filter_by(email=request.email).first()
+    return User.query.filter_by(email=request.email.lower().strip()).first()
 
 def delete_by_email_and_phone(request: DeleteUserRequest) -> bool:
     user = User.query.filter_by(email=request.email, phone = request.phone).first()
