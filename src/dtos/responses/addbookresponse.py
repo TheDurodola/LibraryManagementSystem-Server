@@ -57,3 +57,8 @@ class AddBookResponse:
     def quantity(self, value):
         self._quantity = value
 
+    def to_dict(self):
+        return {
+            "isbn": self._isbn,
+            "title": self._title
+        }

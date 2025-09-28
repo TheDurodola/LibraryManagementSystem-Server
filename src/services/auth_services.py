@@ -29,9 +29,12 @@ class AuthServices:
         if user is None:
             raise InvalidLoginException("Email not found")
 
+
         if not check_password_hash(user.password, request.password):
             raise InvalidLoginException("Wrong password")
-        login_user(user)
+
+
+        login_user(user, remember=True)
 
         return map_user_to_login_response(user)
 

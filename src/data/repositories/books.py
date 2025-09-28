@@ -25,7 +25,6 @@ def exists_by_isbn(isbn: str) -> bool:
 
 
 def find_by_isbn(isbn: str) -> Book:
-
     book = db.session.query(Book).filter_by(isbn_13=isbn).first()
     if book:
         return book
@@ -33,7 +32,6 @@ def find_by_isbn(isbn: str) -> Book:
     book = Book.query.filter_by(isbn=isbn).first()
     if book:
         return book
-
 
     raise BookNotAvailableException("Book not found")
 

@@ -3,6 +3,8 @@ from src.data.repositories.books import save, find_by_isbn, find_all
 from src.dtos.requests.addbookrequest import AddBookRequest
 from src.dtos.requests.bookrequest import BookRequest
 from src.dtos.responses.addbookresponse import AddBookResponse
+from src.exceptions.bookalreadyexistexception import BookAlreadyExistException
+from src.exceptions.booknotavailableexception import BookNotAvailableException
 from src.exceptions.invalidquantityexception import InvalidQuantityException
 from src.utils.api_call import search_book_by_isbn
 from src.utils.mapper import map_book_to_add_book_response
@@ -20,6 +22,10 @@ class LibrarianServices:
       book.genre = apiResponse["genre"]
       book.quantity = request.quantity
       book.added_by = request.added_by
+      try:
+         find_by_isbn(request.isbn)
+      except BookNotAvailableException as e:
+         pass
       save(book)
       return AddBookResponse(map_book_to_add_book_response(book))
 
