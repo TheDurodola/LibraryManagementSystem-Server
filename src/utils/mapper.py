@@ -14,9 +14,9 @@ from src.exceptions.unauthorizedaccessexception import UnauthorizedAccessExcepti
 def map_add_user_request_to_user(request) ->  Admin | Patron | Librarian:
     if request.role == "admin":
         user = Admin()
-        user.firstname = request.firstname
-        user.lastname = request.lastname
-        user.email = request.email
+        user.firstname = request.firstname.capitalize()
+        user.lastname = request.lastname.capitalize()
+        user.email = request.email.lower()
         user.phone = request.phone
         user.role = request.role
         user.password = request.password

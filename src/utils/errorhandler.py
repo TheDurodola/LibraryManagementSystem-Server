@@ -162,10 +162,12 @@ def register_error_handlers(app):
 
     # @app.errorhandler(Exception)
     # def handle_global_exception(error):
+    #     message = getattr(error, "message", None) or "Something went wrong. Please contact the administrator."
+    #
     #     response = {
     #         "success": False,
     #         "error": {
-    #             "message": "Something went wrong. Please contact the administrator.",
+    #             "message": message,
     #             "code": 500
     #         }
     #     }
